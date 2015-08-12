@@ -18,7 +18,7 @@ module Fluent
 
     def configure(conf)
       super
-      set_prev_table_infos
+      set_prev_table_infos('change_mysql_table_default', {})
 
       begin
         @client = Mysql2::Client.new({
@@ -33,14 +33,15 @@ module Fluent
       end
     end
 
-    def set_prev_table_infos(table_infos_arr = {})
-      @prev_table_infos_arr = table_infos_arr
+    def set_prev_table_infos(tag, table_infos_arr = {})
+      @prev_table_infos_arr = {} if @prev_table_infos_arr.nil?
+      @prev_table_infos_arr[tag] = table_infos_arr
     end
 
     def filter_stream(tag, es)
       new_es = MultiEventStream.new
       es.each do |time, record|
-        message = change?(record)
+        message = change?(tag, record)
         if !message.empty?
           new_es.add(time, message)
         end
@@ -71,26 +72,29 @@ module Fluent
       end
     end
 
-    def change_table_infos(now_table_infos_arr)
+    def change_table_infos(tag, now_table_infos_arr)
       change_table_names = []
 
       now_table_infos_arr.each do |table_name, table_info|
-        change_table_names << table_name if change_table_info(table_name, table_info)
+        change_table_names << table_name if change_table_info(tag, table_name, table_info)
       end
 
       change_table_names
     end
 
-    def change_table_info(table_name, table_info)
-      return false unless @prev_table_infos_arr.has_key? table_name
-      return false if @prev_table_infos_arr[table_name] == table_info
+    def change_table_info(tag, table_name, table_info)
+      @prev_table_infos_arr[tag] = {} if @prev_table_infos_arr[tag].nil?
+      @prev_table_infos_arr[tag][table_name] = {} if @prev_table_infos_arr[tag][table_name].nil?
+
+      return false if @prev_table_infos_arr[tag][table_name].empty?
+      return false if @prev_table_infos_arr[tag][table_name] == table_info
       true
     end
 
-    def change?(record)
+    def change?(tag, record)
       now_table_infos_arr = now_table_infos(record)
-      change_tables = change_table_infos(now_table_infos_arr)
-      set_prev_table_infos(now_table_infos_arr)
+      change_tables = change_table_infos(tag, now_table_infos_arr)
+      set_prev_table_infos(tag, now_table_infos_arr)
       change_tables
     end
   end

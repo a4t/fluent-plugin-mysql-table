@@ -51,8 +51,8 @@ class FilterChangeMysqlTableTest < Test::Unit::TestCase
         'table1' => 'CREATE TABLE `table1` (`id` int(11) unsigned NOT NULL AUTO_INCREMENT, PRIMARY KEY (`id`) ) ENGINE=InnoDB DEFAULT CHARSET=utf8;',
         'table2' => 'CREATE TABLE `table2` ( `id` int(10) unsigned NOT NULL AUTO_INCREMENT, `path` varchar(255) CHARACTER SET ascii COLLATE ascii_bin NOT NULL DEFAULT '', `width` int(10) unsigned NOT NULL, `height` int(10) unsigned NOT NULL, `deleted` datetime DEFAULT NULL, `created` datetime NOT NULL, `modified` datetime NOT NULL, PRIMARY KEY (`id`), KEY `created` (`created`), KEY `deleted` (`deleted`) ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;'
       }
-      @change_mysql_table_filter.set_prev_table_infos(table_infos_arr)
-      result = @change_mysql_table_filter.change_table_infos(table_infos_arr)
+      @change_mysql_table_filter.set_prev_table_infos('mysql.table', table_infos_arr)
+      result = @change_mysql_table_filter.change_table_infos('mysql.table', table_infos_arr)
       assert_equal([], result)
     end
 
@@ -61,10 +61,10 @@ class FilterChangeMysqlTableTest < Test::Unit::TestCase
         'table1' => 'CREATE TABLE `table1` (`id` int(11) unsigned NOT NULL AUTO_INCREMENT, PRIMARY KEY (`id`) ) ENGINE=InnoDB DEFAULT CHARSET=utf8;',
         'table2' => 'CREATE TABLE `table2` ( `id` int(10) unsigned NOT NULL AUTO_INCREMENT, `path` varchar(255) CHARACTER SET ascii COLLATE ascii_bin NOT NULL DEFAULT '', `width` int(10) unsigned NOT NULL, `height` int(10) unsigned NOT NULL, `deleted` datetime DEFAULT NULL, `created` datetime NOT NULL, `modified` datetime NOT NULL, PRIMARY KEY (`id`), KEY `created` (`created`), KEY `deleted` (`deleted`) ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;'
       }
-      @change_mysql_table_filter.set_prev_table_infos(table_infos_arr)
+      @change_mysql_table_filter.set_prev_table_infos('mysql.table', table_infos_arr)
       change_table_infos_arr = table_infos_arr
       change_table_infos_arr['table3'] = 'CREATE TABLE `table3` ( `id` int(10) unsigned NOT NULL AUTO_INCREMENT, `path` varchar(255) CHARACTER SET ascii COLLATE ascii_bin NOT NULL DEFAULT '', `width` int(10) unsigned NOT NULL, `height` int(10) unsigned NOT NULL, `deleted` datetime DEFAULT NULL, `created` datetime NOT NULL, `modified` datetime NOT NULL, PRIMARY KEY (`id`), KEY `created` (`created`), KEY `deleted` (`deleted`) ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;'
-      result = @change_mysql_table_filter.change_table_infos(change_table_infos_arr)
+      result = @change_mysql_table_filter.change_table_infos('mysql.table', change_table_infos_arr)
       assert_equal([], result)
     end
 
@@ -73,12 +73,12 @@ class FilterChangeMysqlTableTest < Test::Unit::TestCase
         'table1' => 'CREATE TABLE `table1` (`id` int(11) unsigned NOT NULL AUTO_INCREMENT, PRIMARY KEY (`id`) ) ENGINE=InnoDB DEFAULT CHARSET=utf8;',
         'table2' => 'CREATE TABLE `table2` ( `id` int(10) unsigned NOT NULL AUTO_INCREMENT, `path` varchar(255) CHARACTER SET ascii COLLATE ascii_bin NOT NULL DEFAULT '', `width` int(10) unsigned NOT NULL, `height` int(10) unsigned NOT NULL, `deleted` datetime DEFAULT NULL, `created` datetime NOT NULL, `modified` datetime NOT NULL, PRIMARY KEY (`id`), KEY `created` (`created`), KEY `deleted` (`deleted`) ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;'
       }
-      @change_mysql_table_filter.set_prev_table_infos(table_infos_arr)
+      @change_mysql_table_filter.set_prev_table_infos('mysql.table', table_infos_arr)
       change_table_infos_arr = table_infos_arr
       change_table_infos_arr = {
         'table2' => 'CREATE TABLE `table2` ( `id` int(10) unsigned NOT NULL AUTO_INCREMENT, `path` varchar(255) CHARACTER SET ascii COLLATE ascii_bin NOT NULL DEFAULT '', `width` int(10) unsigned NOT NULL, `height` int(10) unsigned NOT NULL, `deleted` datetime DEFAULT NULL, `created` datetime NOT NULL, `modified` datetime NOT NULL, PRIMARY KEY (`id`), KEY `created` (`created`), KEY `deleted` (`deleted`) ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;'
       }
-      result = @change_mysql_table_filter.change_table_infos(table_infos_arr)
+      result = @change_mysql_table_filter.change_table_infos('mysql.table', table_infos_arr)
       assert_equal([], result)
     end
 
@@ -87,11 +87,11 @@ class FilterChangeMysqlTableTest < Test::Unit::TestCase
         'table1' => 'CREATE TABLE `table1` (`id` int(11) unsigned NOT NULL AUTO_INCREMENT, PRIMARY KEY (`id`) ) ENGINE=InnoDB DEFAULT CHARSET=utf8;',
         'table2' => 'CREATE TABLE `table2` ( `id` int(10) unsigned NOT NULL AUTO_INCREMENT, `path` varchar(255) CHARACTER SET ascii COLLATE ascii_bin NOT NULL DEFAULT '', `width` int(10) unsigned NOT NULL, `height` int(10) unsigned NOT NULL, `deleted` datetime DEFAULT NULL, `created` datetime NOT NULL, `modified` datetime NOT NULL, PRIMARY KEY (`id`), KEY `created` (`created`), KEY `deleted` (`deleted`) ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;'
       }
-      @change_mysql_table_filter.set_prev_table_infos(table_infos_arr)
+      @change_mysql_table_filter.set_prev_table_infos('mysql.table', table_infos_arr)
       change_table_infos_arr = {
         'table1' => 'hoge',
       }
-      result = @change_mysql_table_filter.change_table_infos(change_table_infos_arr)
+      result = @change_mysql_table_filter.change_table_infos('mysql.table', change_table_infos_arr)
       assert_equal(['table1'], result)
     end
   end
@@ -101,6 +101,6 @@ class FilterChangeMysqlTableTest < Test::Unit::TestCase
       'table1' => 'CREATE TABLE `table1` (`id` int(11) unsigned NOT NULL AUTO_INCREMENT, PRIMARY KEY (`id`) ) ENGINE=InnoDB DEFAULT CHARSET=utf8;',
       'table2' => 'CREATE TABLE `table2` ( `id` int(10) unsigned NOT NULL AUTO_INCREMENT, `path` varchar(255) CHARACTER SET ascii COLLATE ascii_bin NOT NULL DEFAULT '', `width` int(10) unsigned NOT NULL, `height` int(10) unsigned NOT NULL, `deleted` datetime DEFAULT NULL, `created` datetime NOT NULL, `modified` datetime NOT NULL, PRIMARY KEY (`id`), KEY `created` (`created`), KEY `deleted` (`deleted`) ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;'
     }
-    @change_mysql_table_filter.set_prev_table_infos(table_infos_arr)
+    @change_mysql_table_filter.set_prev_table_infos('mysql.table', table_infos_arr)
   end
 end
